@@ -2,23 +2,73 @@ import client from "../client";
 
 export default {
     User: {
-        followers: async({ id }) => {
-            const page = 1;
-            return await client.user
-                .findUnique({ where: { id } })
-                .followers({
-                    take: 5,
-                    skip: (page - 1) * 5,
-                });
+        followers: ({ id }, { lastId }) => 
+            client.user.findMany({
+                where: {
+                    following: {
+                        some: {
+                            id,
+                        },
+                    },
+                },
+                take: 5,
+                skip: lastId ? 1 : 0,
+                ...(lastId && { cursor: { id: lastId } }),
+            }),
+        following: ({ id }, { lastId })  =>
+            client.user.findMany({
+            where: {
+                followers: {
+                    some: {
+                        id,
+                    },
+                },
+            },
+            take: 5,
+            skip: lastId ? 1 : 0,
+            ...(lastId && { cursor: { id: lastId } }),
+        }),
+        totalFollowers: ({ id }) => 
+        client.user.count({
+            where: {
+                following: {
+                    some: {
+                        id,
+                    },
+                },
+            },
+        }),
+        totalFollowing: ({ id }) => 
+            client.user.count({
+                where:{
+                    followers: {
+                        some: {
+                            id,
+                        },
+                    },
+                }
+            }),
+        isMe: ({ id }, _, { loggedInUser }) => {
+            if (!loggedInUser) {
+                return false;
+            }
+            return id === loggedInUser.id;
         },
-        following: async({ id }) => {
-            const page = 1;
-            return await client.user
-                .findUnique({ where: { id } })
-                .following({
-                    take: 5,
-                    skip: (page - 1) * 5,
-                });
+        isFollowing: async ({ id }, _, { loggedInUser }) => {
+            if (!loggedInUser) {
+                return false;
+            }
+            const exists = await client.user.count({
+                where: {
+                    username: loggedInUser.username,
+                    following: {
+                        some: {
+                            id,
+                        },
+                    },
+                },
+            });
+            return Boolean(exists);
         },
     }
 };
