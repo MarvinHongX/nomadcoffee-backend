@@ -19,6 +19,7 @@ export default {
                             },
                         ],
                     },
+                    select: { id: true },
                 })
                 if(existingUser){
                     return {
@@ -53,4 +54,4 @@ export default {
         },
 
     },
-}
+};
