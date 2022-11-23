@@ -29,17 +29,8 @@ export default {
                 }
 
              
-                
-                let categoryObj = [];
-
                 let deletedCoffeeShop = await client.coffeeShop.delete({
                     where: { id },
-                    data: {
-                        categories: {
-                            disconnect: oldCoffeeShop.categories,
-                            connectOrCreate: categoryObj,
-                        },          
-                    },
                 });
                 if (!deletedCoffeeShop) {
                     return {
