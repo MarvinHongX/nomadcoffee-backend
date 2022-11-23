@@ -32,7 +32,7 @@ const startServer = async () => {
   apollo.applyMiddleware({ app });
   await new Promise((resolve) => app.listen({ port: PORT }, resolve));
   console.log(
-    `🚀 Server is running on http://localhost:${PORT}${apollo.graphqlPath} ✅`
+    `🚀 Server is running on https://marvincoffee.herokuapp.com${apollo.graphqlPath} ✅`
   );
 };
 
