@@ -65,7 +65,7 @@ export default {
                                 const readStream = createReadStream();
                                 const writeStream = createWriteStream(process.cwd() + "/uploads/" + newFilename);
                                 readStream.pipe(writeStream);
-                                photoUrl = `http://localhost:4000/static/${newFilename}`;
+                                photoUrl = `https://marvincoffee.herokuapp.com/static/${newFilename}`;
 
                                 const coffeeShopPhoto = await client.coffeeShopPhoto.create({
                                     data: {
