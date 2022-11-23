@@ -74,11 +74,9 @@ export default {
                     const oldPhotos = await client.coffeeShopPhoto.findMany({
                         where: { shopId: id },
                     });
-                    console.log(oldPhotos);
                 
                     for (let i = 0; i < oldPhotos.length; i++) {
-                        const oldFilename = oldPhotos[i].url.replace("http://localhost:4000/static/", "");
-                        console.log(oldFilename);
+                        const oldFilename = oldPhotos[i].url.replace("https://marvincoffee.herokuapp.com/static/", "");
                         unlinkSync(process.cwd() + `/uploads/${oldFilename}`); 
                         await client.coffeeShopPhoto.delete({
                             where: {
@@ -95,7 +93,7 @@ export default {
                             const readStream = createReadStream();
                             const writeStream = createWriteStream(process.cwd() + "/uploads/" + newFilename);
                             readStream.pipe(writeStream);
-                            photoUrl = `http://localhost:4000/static/${newFilename}`;
+                            photoUrl = `https://marvincoffee.herokuapp.com/static/${newFilename}`;
 
                             const coffeeShopPhoto = await client.coffeeShopPhoto.create({
                                 data: {
