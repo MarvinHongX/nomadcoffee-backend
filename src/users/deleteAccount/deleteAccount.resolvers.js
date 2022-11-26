@@ -20,24 +20,10 @@ export default {
                 }
 
              
-                let deletedUser = await client.user.delete({
-                    where: { username },
-                });
-                if (!deletedUser) {
-                    return {
-                        ok: false,
-                        error: "Can't delete User.",
-                    }
-                }
                 const oldCoffeeShops = await client.CoffeeShop.findMany({
                     where: { userId: loggedInUser.id },                 
                 });
                 for (let i = 0; i < oldCoffeeShops.length; i++) {
-                    await client.CoffeeShop.delete({
-                        where: {
-                            id: oldCoffeeShops[i].id,
-                        },
-                    });
                     const oldPhotos = await client.coffeeShopPhoto.findMany({
                         where: { shopId: oldCoffeeShops[i].id },
                     });
@@ -50,7 +36,22 @@ export default {
                             },
                         });
                     }
+                    await client.CoffeeShop.delete({
+                        where: {
+                            id: oldCoffeeShops[i].id,
+                        },
+                    });
                 }   
+
+                let deletedUser = await client.user.delete({
+                    where: { username },
+                });
+                if (!deletedUser) {
+                    return {
+                        ok: false,
+                        error: "Can't delete User.",
+                    }
+                }
 
                 return {
                     ok: true,
