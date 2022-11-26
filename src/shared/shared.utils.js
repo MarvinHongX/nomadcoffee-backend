@@ -1,10 +1,16 @@
 import AWS from "aws-sdk";
 
+/*
 AWS.config.update({
     credentials: {
         accessKeyId: process.env.AWS_KEY,
         secretAccessKey: process.env.AWS_SECRET,
     },
+});
+*/
+AWS.config.update({
+    accessKeyId: process.env.AWS_KEY,
+    secretAccessKey: process.env.AWS_SECRET,
 });
 
 const BUCKET = "marvincoffee-uploads";
