@@ -12,7 +12,7 @@ const resolverFn = async (
     const FOLDERNAME = "avatars";
     const oldUser = await client.user.findUnique({
         where: { username },
-        select: { userId: true, avatarURL: true },
+        select: { username: true, avatarURL: true },
     });
     if (!oldUser){
         return {
