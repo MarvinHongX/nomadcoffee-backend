@@ -1,6 +1,6 @@
-import { unlinkSync } from "fs";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.js";
 import client from "../../client";
+import { FOLDER_NAME } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 
 export default {
@@ -44,8 +44,7 @@ export default {
                 });
             
                 for (let i = 0; i < oldPhotos.length; i++) {
-                    const oldFilename = oldPhotos[i].url.replace("https://marvincoffee.herokuapp.com/static/", "");
-                    unlinkSync(process.cwd() + `/uploads/${oldFilename}`); 
+                    await deleteFromS3(oldPhotos[i].url, FOLDER_NAME.coffeeShopPhotos);
                     await client.coffeeShopPhoto.delete({
                         where: {
                             id: oldPhotos[i].id,

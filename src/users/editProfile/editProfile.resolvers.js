@@ -2,14 +2,13 @@ import bcrypt from "bcrypt";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.js";
 import client from "../../client";
 import { protectedResolver } from "../users.utils";
-import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
+import { deleteFromS3, FOLDER_NAME, uploadToS3 } from "../../shared/shared.utils";
 
 const resolverFn = async (
     _, 
     { username, email, name, location, password: newPassword, avatarURL: newAvatar, githubUsername }, 
     { loggedInUser }
 ) => {
-    const FOLDERNAME = "avatars";
     const oldUser = await client.user.findUnique({
         where: { username },
         select: { username: true, avatarURL: true },
@@ -22,8 +21,8 @@ const resolverFn = async (
     }
     let newAvatarURL = null;
     if (newAvatar) {
-        await deleteFromS3(oldUser.avatarURL, FOLDERNAME);
-        newAvatarURL = await uploadToS3(newAvatar, loggedInUser.id, FOLDERNAME);
+        await deleteFromS3(oldUser.avatarURL, FOLDER_NAME.avatars);
+        newAvatarURL = await uploadToS3(newAvatar, loggedInUser.id, FOLDER_NAME.avatars);
     }
 
     let uglyPassword = null;

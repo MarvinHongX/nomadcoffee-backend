@@ -1,7 +1,11 @@
 import AWS from "aws-sdk";
 
 
-const BUCKET = "marvincoffee-uploads";
+export const BUCKET = "marvincoffee-uploads";
+export const FOLDER_NAME = {
+    avatars: "avatars",
+    coffeeShopPhotos: "coffeeShopPhotos",
+}
 
 
 export const uploadToS3 = async (file, userId, folderName) => {

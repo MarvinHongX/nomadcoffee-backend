@@ -1,6 +1,6 @@
 import GraphQLUpload from "graphql-upload/GraphQLUpload.js";
 import client from "../../client";
-import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
+import { deleteFromS3, FOLDER_NAME, uploadToS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 import { processCategories } from "../coffeeShops.utils";
 
@@ -79,7 +79,7 @@ export default {
                     for (let i = 0; i < oldPhotos.length; i++) {
                         let oldPhotoUrl = null;
                         if (oldPhotos[i]) {
-                            //oldPhotoUrl = await deleteFromS3(oldPhotos[i].url, FOLDERNAME)
+                            oldPhotoUrl = await deleteFromS3(oldPhotos[i].url, FOLDER_NAME.coffeeShopPhotos)
                             await client.coffeeShopPhoto.delete({
                                 where: {
                                     id: oldPhotos[i].id,
@@ -91,7 +91,7 @@ export default {
                     for (let i = 0; i < photos.length; i++) {
                         let photoUrl = null;
                         if (photos[i]) {
-                            photoUrl = await uploadToS3(photos[i], loggedInUser.id, FOLDERNAME)
+                            photoUrl = await uploadToS3(photos[i], loggedInUser.id, FOLDER_NAME.coffeeShopPhotos)
                             const coffeeShopPhoto = await client.coffeeShopPhoto.create({
                                 data: {
                                     url: photoUrl,
