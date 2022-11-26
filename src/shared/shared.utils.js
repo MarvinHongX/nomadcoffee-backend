@@ -25,7 +25,7 @@ export const uploadToS3 = async (file, userId, folderName) => {
         .promise();
     return Location;
 };
-
+/*
 export const deleteFromS3 = async (fileUrl, folderName) => {
     AWS.config.update({
         credentials: {
@@ -33,7 +33,7 @@ export const deleteFromS3 = async (fileUrl, folderName) => {
             secretAccessKey: process.env.AWS_SECRET,
         },
     });
-    
+
     if (fileUrl){
         const decodeFileUrl = decodeURL(fileUrl);
         const filename = decodeFileUrl.split(`/${folderName}/`)[1];
@@ -45,3 +45,4 @@ export const deleteFromS3 = async (fileUrl, folderName) => {
             .promise();
     }
 };
+*/
