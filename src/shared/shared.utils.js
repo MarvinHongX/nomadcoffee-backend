@@ -8,21 +8,17 @@ AWS.config.update({
     region: "ap-northeast-2",
 });
 
+AWS.config.delete({
+    credentials: {
+        accessKeyId: process.env.AWS_KEY,
+        secretAccessKey: process.env.AWS_SECRET,
+    },
+    region: "ap-northeast-2",
+});
+
 const BUCKET = "marvincoffee-uploads";
 const bucketInstance = new AWS.S3();
 
-export const deleteFromS3 = async (fileUrl, folderName) => {
-    if (fileUrl){
-        const filename = fileUrl.split(`/${folderName}/`)[1];
-        await bucketInstance
-            .deleteObject({
-                Bucket: `${BUCKET}/${folderName}`,
-                Key: filename,
-            })
-            .promise();
-    }
-
-};
 
 export const uploadToS3 = async (file, userId, folderName) => {
     const { filename, createReadStream } = await file;
@@ -39,3 +35,14 @@ export const uploadToS3 = async (file, userId, folderName) => {
     return Location;
 };
 
+export const deleteFromS3 = async (fileUrl, folderName) => {
+    if (fileUrl){
+        const filename = fileUrl.split(`/${folderName}/`)[1];
+        await bucketInstance
+            .deleteObject({
+                Bucket: `${BUCKET}/${folderName}`,
+                Key: filename,
+            })
+            .promise();
+    }
+};
