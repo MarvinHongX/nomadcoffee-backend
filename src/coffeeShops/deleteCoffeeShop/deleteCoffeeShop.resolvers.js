@@ -27,17 +27,6 @@ export default {
                         error: "CoffeeShop not found."
                     }
                 }
-
-             
-                let deletedCoffeeShop = await client.coffeeShop.delete({
-                    where: { id },
-                });
-                if (!deletedCoffeeShop) {
-                    return {
-                        ok: false,
-                        error: "Can't delete coffeeShop.",
-                    }
-                }
                 
                 const oldPhotos = await client.coffeeShopPhoto.findMany({
                     where: { shopId: id },
@@ -52,6 +41,16 @@ export default {
                     });
                 }
 
+                let deletedCoffeeShop = await client.coffeeShop.delete({
+                    where: { id },
+                });
+                if (!deletedCoffeeShop) {
+                    return {
+                        ok: false,
+                        error: "Can't delete coffeeShop.",
+                    }
+                }
+                
                 return {
                     ok: true,
                 };
