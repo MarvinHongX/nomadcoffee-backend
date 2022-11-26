@@ -80,7 +80,7 @@ export default {
                     for (let i = 0; i < oldPhotos.length; i++) {
                         let oldPhotoUrl = null;
                         if (oldPhotos[i]) {
-                            oldPhotoUrl = await deleteFromS3(oldPhotos[i].url, FOLDERNAME)
+                            //oldPhotoUrl = await deleteFromS3(oldPhotos[i].url, FOLDERNAME)
                             await client.coffeeShopPhoto.delete({
                                 where: {
                                     id: oldPhotos[i].id,

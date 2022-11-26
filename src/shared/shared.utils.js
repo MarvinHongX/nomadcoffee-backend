@@ -7,14 +7,6 @@ AWS.config.update({
     },
     region: "ap-northeast-2",
 });
-AWS.config.delete({
-    credentials: {
-        accessKeyId: process.env.AWS_KEY,
-        secretAccessKey: process.env.AWS_SECRET,
-    },
-    region: "ap-northeast-2",
-});
-
 
 const BUCKET = "marvincoffee-uploads";
 const bucketInstance = new AWS.S3();
