@@ -35,7 +35,7 @@ export const deleteFromS3 = async (fileUrl, folderName) => {
     });
 
     if (fileUrl){
-        const decodeFileUrl = decodeURL(fileUrl);
+        const decodeFileUrl = decodeURI(fileUrl);
         const filename = decodeFileUrl.split(`/${folderName}/`)[1];
         await new AWS.S3()
             .deleteObject({
