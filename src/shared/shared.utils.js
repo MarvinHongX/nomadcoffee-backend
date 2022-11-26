@@ -1,22 +1,17 @@
 import AWS from "aws-sdk";
 
-/*
-AWS.config.update({
-    credentials: {
-        accessKeyId: process.env.AWS_KEY,
-        secretAccessKey: process.env.AWS_SECRET,
-    },
-});
-*/
-AWS.config.update({
-    accessKeyId: process.env.AWS_KEY,
-    secretAccessKey: process.env.AWS_SECRET,
-});
 
 const BUCKET = "marvincoffee-uploads";
 
 
 export const uploadToS3 = async (file, userId, folderName) => {
+    AWS.config.update({
+        credentials: {
+            accessKeyId: process.env.AWS_KEY,
+            secretAccessKey: process.env.AWS_SECRET,
+        },
+    });
+    
     const { filename, createReadStream } = await file;
     const readStream = createReadStream();
     const objectName = `${folderName}/${userId}-${Date.now()}-${filename}`;
@@ -32,6 +27,13 @@ export const uploadToS3 = async (file, userId, folderName) => {
 };
 
 export const deleteFromS3 = async (fileUrl, folderName) => {
+    AWS.config.update({
+        credentials: {
+            accessKeyId: process.env.AWS_KEY,
+            secretAccessKey: process.env.AWS_SECRET,
+        },
+    });
+    
     if (fileUrl){
         const decodeFileUrl = decodeURL(fileUrl);
         const filename = decodeFileUrl.split(`/${folderName}/`)[1];
