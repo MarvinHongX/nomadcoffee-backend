@@ -12,13 +12,16 @@ const BUCKET = "marvincoffee-uploads";
 const bucketInstance = new AWS.S3();
 
 export const deleteFromS3 = async (fileUrl, folderName) => {
-    const filename = fileUrl.split(`/${folderName}/`)[1];
-    await bucketInstance
-        .deleteObject({
-            Bucket: `${BUCKET}/${folderName}`,
-            Key: filename,
-        })
-        .promise();
+    if (fileUrl){
+        const filename = fileUrl.split(`/${folderName}/`)[1];
+        await bucketInstance
+            .deleteObject({
+                Bucket: `${BUCKET}/${folderName}`,
+                Key: filename,
+            })
+            .promise();
+    }
+
 };
 
 export const uploadToS3 = async (file, userId, folderName) => {
