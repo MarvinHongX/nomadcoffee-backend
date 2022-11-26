@@ -21,7 +21,7 @@ const resolverFn = async (
     }
     let newAvatarURL = null;
     if (newAvatar) {
-        oldAvatarURL = await deleteFromS3(oldUser.avatarURL, FOLDERNAME);
+        await deleteFromS3(oldUser.avatarURL, FOLDERNAME);
         newAvatarURL = await uploadToS3(newAvatar, loggedInUser.id, FOLDERNAME);
     }
 
