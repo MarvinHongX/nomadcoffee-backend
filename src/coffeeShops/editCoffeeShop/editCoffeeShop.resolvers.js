@@ -1,4 +1,3 @@
-import { createWriteStream, unlinkSync } from "fs";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.js";
 import client from "../../client";
 import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
