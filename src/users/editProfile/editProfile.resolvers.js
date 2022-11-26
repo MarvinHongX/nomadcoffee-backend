@@ -1,24 +1,30 @@
-import { createWriteStream } from "fs";
 import bcrypt from "bcrypt";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.js";
 import client from "../../client";
 import { protectedResolver } from "../users.utils";
+import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
 
 const resolverFn = async (
     _, 
     { username, email, name, location, password: newPassword, avatarURL: newAvatar, githubUsername }, 
     { loggedInUser }
 ) => {
+    const FOLDERNAME = "avatars";
+    const oldUser = await client.user.findUnique({
+        where: { username },
+    });
+    if (!oldUser){
+        return {
+            ok: false,
+            error: "User not found.",
+        }
+    }
     let newAvatarURL = null;
     if (newAvatar) {
-        const { filename, createReadStream } = await newAvatar;
-        const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
-        const readStream = createReadStream();
-        const writeStream = createWriteStream(process.cwd() + "/uploads/" + newFilename);
-        readStream.pipe(writeStream);
-        newAvatarURL = `http://localhost:4000/static/${newFilename}`;
+        oldAvatarURL = await deleteFromS3(oldUser.avatarURL, FOLDERNAME);
+        newAvatarURL = await uploadToS3(newAvatar, loggedInUser.id, FOLDERNAME);
     }
-    
+
     let uglyPassword = null;
     if (newPassword) {
         uglyPassword = await bcrypt.hash(newPassword, 10);

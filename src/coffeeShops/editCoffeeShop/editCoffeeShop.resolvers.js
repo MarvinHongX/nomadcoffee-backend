@@ -1,6 +1,7 @@
 import { createWriteStream, unlinkSync } from "fs";
 import GraphQLUpload from "graphql-upload/GraphQLUpload.js";
 import client from "../../client";
+import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 import { processCategories } from "../coffeeShops.utils";
 
@@ -9,6 +10,7 @@ export default {
     Mutation: {
         editCoffeeShop: protectedResolver(
             async (_, { id, name, latitude, longitude, categories, photos }, { loggedInUser }) => {
+                const FOLDERNAME = "coffeeShopPhotos";
                 const oldCoffeeShop = await client.coffeeShop.findFirst({
                     where: {
                         id,
@@ -76,25 +78,21 @@ export default {
                     });
                 
                     for (let i = 0; i < oldPhotos.length; i++) {
-                        const oldFilename = oldPhotos[i].url.replace("https://marvincoffee.herokuapp.com/static/", "");
-                        unlinkSync(process.cwd() + `/uploads/${oldFilename}`); 
-                        await client.coffeeShopPhoto.delete({
-                            where: {
-                                id: oldPhotos[i].id,
-                            },
-                        });
+                        let oldPhotoUrl = null;
+                        if (oldPhotos[i]) {
+                            oldPhotoUrl = await deleteFromS3(oldPhotos[i].url, FOLDERNAME)
+                            await client.coffeeShopPhoto.delete({
+                                where: {
+                                    id: oldPhotos[i].id,
+                                },
+                            });
+                        }
                     }
 
                     for (let i = 0; i < photos.length; i++) {
                         let photoUrl = null;
                         if (photos[i]) {
-                            const { filename, createReadStream } = await photos[i];
-                            const newFilename = `${newCoffeeShop.id}-${loggedInUser.id}-${Date.now()}-${filename}`;
-                            const readStream = createReadStream();
-                            const writeStream = createWriteStream(process.cwd() + "/uploads/" + newFilename);
-                            readStream.pipe(writeStream);
-                            photoUrl = `https://marvincoffee.herokuapp.com/static/${newFilename}`;
-
+                            photoUrl = await uploadToS3(photos[i], loggedInUser.id, FOLDERNAME)
                             const coffeeShopPhoto = await client.coffeeShopPhoto.create({
                                 data: {
                                     url: photoUrl,
