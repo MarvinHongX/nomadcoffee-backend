@@ -70,6 +70,10 @@ export default {
             });
             return Boolean(exists);
         },
-        coffeeShops: ({ id }) => client.user.findUnique({ where: { id }}).coffeeShops(),
+        coffeeShops: ({ id }) => client.user.findUnique({ where: { id }}).coffeeShops({
+            orderBy: {
+                updatedAt: "desc", 
+            },
+        }),
     }
 };
