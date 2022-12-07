@@ -9,7 +9,6 @@ export default {
     Mutation: {
         editCoffeeShop: protectedResolver(
             async (_, { id, name, latitude, longitude, categories, photos }, { loggedInUser }) => {
-                const FOLDERNAME = "coffeeShopPhotos";
                 const oldCoffeeShop = await client.coffeeShop.findFirst({
                     where: {
                         id,

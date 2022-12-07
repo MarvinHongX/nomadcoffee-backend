@@ -10,7 +10,9 @@ const resolverFn = async (
     { loggedInUser }
 ) => {
     const oldUser = await client.user.findUnique({
-        where: { username },
+        where: { 
+            id: loggedInUser.id,
+         },
         select: { username: true, avatarURL: true },
     });
     if (!oldUser){
