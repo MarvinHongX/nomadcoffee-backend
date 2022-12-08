@@ -70,9 +70,19 @@ export default {
             });
             return Boolean(exists);
         },
-        coffeeShops: ({ id }, { offset }) => client.user.findUnique({ where: { id }}).coffeeShops({
+        /*
+        coffeeShops: ({ id }, { offset }) => client.coffeeShop.findMany({
+            where: {
+                userId: id,
+            },
             take: 15,
             skip: offset,
+            orderBy: {
+                updatedAt: "desc", 
+            },
+        })
+        */
+        coffeeShops: ({ id }, { offset }) => client.user.findUnique({ where: { id }}).coffeeShops({
             orderBy: {
                 updatedAt: "desc", 
             },
