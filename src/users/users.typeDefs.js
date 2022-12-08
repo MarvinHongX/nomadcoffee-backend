@@ -15,7 +15,7 @@ export default gql`
         totalFollowing: Int!
         isMe: Boolean!
         isFollowing: Boolean!
-        coffeeShops: [CoffeeShop]
+        coffeeShops(offset: Int!): [CoffeeShop]
         createdAt: String!
         updatedAt: String!
     }
