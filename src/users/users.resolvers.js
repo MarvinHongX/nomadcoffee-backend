@@ -71,7 +71,7 @@ export default {
             return Boolean(exists);
         },
         coffeeShops: ({ id }, { offset }) => client.user.findUnique({ where: { id }}).coffeeShops({
-            take: 2,
+            take: 15,
             skip: offset,
             orderBy: {
                 updatedAt: "desc", 

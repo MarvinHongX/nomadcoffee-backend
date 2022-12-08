@@ -2,8 +2,10 @@ import client from "../../client"
 
 export default {
     Query: {
-        searchCoffeeShops: async (_, { keyword }) => {
+        searchCoffeeShops: async (_, { keyword, offset }) => {
             return await client.CoffeeShop.findMany({
+                take: 15,
+                skip: offset,
                 where: {
                     OR: [
                         {
@@ -21,6 +23,9 @@ export default {
                             },
                         }
                     ]
+                },
+                orderBy: {
+                    updatedAt: "desc", 
                 },
             })
         }
